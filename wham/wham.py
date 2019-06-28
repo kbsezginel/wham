@@ -199,13 +199,14 @@ class Wham:
         """
         shutil.rmtree(directory)
 
-    def plot_histograms(self, save=None):
+    def plot_histograms(self, title='', save=None):
         """
         Plots position histograms for the simulations.
         """
         fig = plt.figure(figsize=(len(self.simulations) * 0.8, 3), dpi=200)
         for sim in self.simulations.values():
             plot_histogram(sim['position'])
+        plt.title(title)
         if save is not None:
             plt.savefig(save, transparent=True, bbox_inches='tight', dpi=300)
 
