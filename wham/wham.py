@@ -2,6 +2,7 @@
 Python wrapper for Weighted Histogram Analysis Method as implemented by Grossfield et al.
 """
 import os
+import shutil
 import subprocess
 import matplotlib.pyplot as plt
 from .plot import plot_energy_barrier, plot_histogram
@@ -25,6 +26,8 @@ class Wham:
 
         """
         self.simulations = simulations
+        self.input_file = 'wham.in'
+        self.output_file = 'wham.out'
 
     def add_simulation(self, sim_id, time, position, min_position, k_spring, energy=None):
         """Add a simulation result.
@@ -54,7 +57,7 @@ class Wham:
                                     'energy': energy}
 
     def run(self, periodicity, hist_min, hist_max, num_bins, tolerance, temperature, numpad,
-            executable, directory, verbose=True):
+            executable, directory, cleanup=False, verbose=True):
         """
         Run 1D WHAM analysis.
 
@@ -91,12 +94,12 @@ class Wham:
             ts_file = os.path.join(directory, f'{sim_id}.dat')
             self._write_timeseries_file(ts_file, sim['time'], sim['position'], sim['energy'])
             self.simulations[sim_id]['ts_file'] = ts_file
-        data_file = os.path.join(directory, 'wham.in')
+        data_file = os.path.join(directory, self.input_file)
         tsfiles = [i['ts_file'] for i in self.simulations.values()]
         min_pos = [i['min'] for i in self.simulations.values()]
         k_spring = [i['k'] for i in self.simulations.values()]
         self._write_data_file(data_file, tsfiles, min_pos, k_spring)
-        out_file = os.path.join(directory, 'wham.out')
+        out_file = os.path.join(directory, self.output_file)
         self.args = [executable, periodicity, hist_min, hist_max, num_bins,
                      tolerance, temperature, numpad, data_file, out_file]
 
@@ -107,6 +110,8 @@ class Wham:
             stdout, stderr = wham_process.stdout.decode(), wham_process.stderr.decode()
             print("Stdout:\n\n%s\nStderr:\n%s" % (stdout, stderr))
         self.out = self.read_output(out_file)
+        if cleanup:
+            self.cleanup(directory)
         return self.out
 
     def read_output(self, filename):
@@ -182,6 +187,17 @@ class Wham:
         with open(filename, 'w') as f:
             for ts, m, k in zip(tsfiles, min_position, k_spring):
                 f.write('%s  %.5f  %.2f\n' % (ts, m, k))
+
+    def cleanup(self, directory):
+        """
+        Cleanup WHAM simulation input and output files.
+
+        Parameters
+        ----------
+        directory : str
+            Path to directory used to write WHAM files.
+        """
+        shutil.rmtree(directory)
 
     def plot_histograms(self, save=None):
         """
