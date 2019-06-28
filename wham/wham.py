@@ -3,6 +3,8 @@ Python wrapper for Weighted Histogram Analysis Method as implemented by Grossfie
 """
 import os
 import subprocess
+import matplotlib.pyplot as plt
+from .plot import plot_energy_barrier, plot_histogram
 
 
 class Wham:
@@ -104,7 +106,8 @@ class Wham:
         if verbose:
             stdout, stderr = wham_process.stdout.decode(), wham_process.stderr.decode()
             print("Stdout:\n\n%s\nStderr:\n%s" % (stdout, stderr))
-        return self.read_output(out_file)
+        self.out = self.read_output(out_file)
+        return self.out
 
     def read_output(self, filename):
         """
@@ -123,7 +126,7 @@ class Wham:
         """
         with open(filename, 'r') as f:
             lines = f.readlines()
-        data = dict(coor=[], free=[], prob=[])
+        data = dict(position=[], energy=[], probability=[])
         for line in lines[1:]:
             ls = line.split()
             if ls[0] == '#Window':
@@ -179,3 +182,20 @@ class Wham:
         with open(filename, 'w') as f:
             for ts, m, k in zip(tsfiles, min_position, k_spring):
                 f.write('%s  %.5f  %.2f\n' % (ts, m, k))
+
+    def plot_histograms(self, save=None):
+        """
+        Plots position histograms for the simulations.
+        """
+        fig = plt.figure(figsize=(len(self.simulations) * 0.8, 3), dpi=200)
+        for sim in self.simulations.values():
+            plot_histogram(sim['position'])
+        if save is not None:
+            plt.savefig(save, transparent=True, bbox_inches='tight', dpi=300)
+
+    def plot_energy_barrier(self, save=None):
+        """
+        Plots WHAM energy barrier and probability.
+        """
+        plot_energy_barrier(self.out['position'], self.out['energy'], self.out['probability'],
+                            float(self.args[2]), float(self.args[3]), save=save)
