@@ -30,6 +30,7 @@ def plot_energy_barrier(position, free_energy, probability, hist_min, hist_max, 
     plt.suptitle(title, y=0.95)
     if save is not None:
         plt.savefig(save, transparent=True, bbox_inches='tight', dpi=300)
+        plt.close()
 
 
 def plot_histogram(data, bins=50, color='xkcd:crimson', linestyle='k', alpha=0.25, lw=1.5,

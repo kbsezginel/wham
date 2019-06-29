@@ -209,6 +209,7 @@ class Wham:
         plt.title(title)
         if save is not None:
             plt.savefig(save, transparent=True, bbox_inches='tight', dpi=300)
+            plt.close()
 
     def plot_energy_barrier(self, save=None):
         """
