@@ -3,7 +3,6 @@ Plot WHAM free energy barrier, probability, and position histograms.
 """
 import matplotlib.pyplot as plt
 from scipy.stats import norm
-import matplotlib.mlab as mlab
 import numpy as np
 
 
@@ -42,7 +41,7 @@ def plot_histogram(data, bins=50, color='xkcd:crimson', linestyle='k', alpha=0.2
     # the histogram of the data
     n, bins, patches = plt.hist(data, bins, density=1, facecolor=color, alpha=alpha)
     # add a 'best fit' line
-    y = mlab.normpdf(bins, mu, sigma)
+    y = norm.pdf(bins, mu, sigma)
     plt.plot(bins, y, linestyle, linewidth=lw)
     if show_points:
         plt.plot([data[0], mu], [max(y), max(y)], 'k-')
