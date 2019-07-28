@@ -81,7 +81,9 @@ class Wham:
             Path to WHAM 1D executable.
         directory : str
             Path to write input and output files for WHAM analysis.
-        verbose : bool
+        cleanup : bool (optional , default : False)
+            Cleanup input files after running WHAM.
+        verbose : bool (optional , default : True)
             WHAM verbosity.
 
         Returns
@@ -155,7 +157,7 @@ class Wham:
             Simulation time.
         position : list
             Position of the system along the energy barrier during the simulation.
-        energy : list or None
+        energy : list or None (optional)
             Potential energy of the system during simulation.
             Only used if a temperature is specified.
 
@@ -202,6 +204,13 @@ class Wham:
     def plot_histograms(self, title='', save=None):
         """
         Plots position histograms for the simulations.
+
+        Parameters
+        ----------
+        title : str
+            Plot title.
+        save : str or None (optional , default: None)
+            Plot image filename.
         """
         fig = plt.figure(figsize=(len(self.simulations) * 0.8, 3), dpi=200)
         for sim in self.simulations.values():
@@ -214,6 +223,11 @@ class Wham:
     def plot_energy_barrier(self, save=None):
         """
         Plots WHAM energy barrier and probability.
+
+        Parameters
+        ----------
+        save : str or None (optional , default: None)
+            Plot image filename.
         """
         plot_energy_barrier(self.out['position'], self.out['energy'], self.out['probability'],
                             float(self.args[2]), float(self.args[3]), save=save)
