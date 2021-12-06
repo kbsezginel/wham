@@ -15,6 +15,7 @@ Currently, the wrapper only supports 1D WHAM calculations but feel free to open 
 
 Make sure you check out [WHAM documentation](http://membrane.urmc.rochester.edu/sites/default/files/wham/doc.pdf) before using it. It's fairly short and very informative. All the parameters below would make much more sense after you read it.
 
+Note: Since periodicity is not an optional argument, an empty string should be entered for it if the collective variable is not periodic.
 
 ```python
 from wham import Wham
@@ -23,7 +24,7 @@ from wham import Wham
 W = Wham()
 """
 Add your simulations with and id, simulation time, position,
-equlibirum position for the spring, and spring constant in kcal/mol
+equilibrium position for the spring, and spring constant in kcal/mol
 """
 W.add_simulation(sim_id, time, position, eq_position, k_spring)
 

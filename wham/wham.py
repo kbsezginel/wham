@@ -105,7 +105,10 @@ class Wham:
         self.args = [executable, periodicity, hist_min, hist_max, num_bins,
                      tolerance, temperature, numpad, data_file, out_file]
 
-        wham_process = subprocess.run(list(map(str, self.args)),
+        # arg_list = [str(arg) for arg in self.args]
+        arg_list = list(map(str, self.args))
+        while '' in arg_list: arg_list.remove('')
+        wham_process = subprocess.run(arg_list,
                                       stdout=subprocess.PIPE,
                                       stderr=subprocess.PIPE)
         if verbose:
