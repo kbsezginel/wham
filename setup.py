@@ -7,11 +7,10 @@ from setuptools import setup, find_packages
 
 setup(
     name="wham",
-    version="0.1.0",
+    version="0.1.1",
     description="Python wrapper for Weighted Histogram Analysis Method as implemented by Grossfield et al.",
-    author="Kutay B. Sezginel",
-    author_email="kbs37@pitt.edu",
-    url='https://github.com/kbsezginelwham',
+    author="Kutay B. Sezginel, Brian Novak",
+    url='https://github.com/bnovak1/wham',
     include_package_data=True,
     packages=find_packages(),
     install_requires=['numpy'],

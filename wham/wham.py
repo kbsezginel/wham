@@ -42,11 +42,11 @@ class Wham:
             Position of the system along the energy barrier during the simulation.
         min_position : float
             Location of the minimum of the biasing potential for this simulation.
-        k_spring : flaot
+        k_spring : float
             Spring constant for the biasing potential used in this simulation.
             Assuming a potential form of V = 0.5k(x - x0)^2.
             The unit should match the unit of the position. For example if position is in Å
-            the spring constant must be in kcal/mol-Å2
+            the spring constant must be in kcal/mol-Å^2
         energy : list or None
             Potential energy of the system during simulation.
             Only used if a temperature is specified.
@@ -56,15 +56,13 @@ class Wham:
                                     'min': min_position, 'k': k_spring,
                                     'energy': energy}
 
-    def run(self, periodicity, hist_min, hist_max, num_bins, tolerance, temperature, numpad,
-            executable, directory, cleanup=False, verbose=True):
+    def run(self, hist_min, hist_max, num_bins, tolerance, temperature, numpad,
+            executable, directory, periodicity='', cleanup=False, verbose=True):
         """
         Run 1D WHAM analysis.
 
         Parameters
         ----------
-        periodicity : str
-            Periodicity of the reaction coordinate.
         hist_min : float
             Lower boundary of the histogram.
         hist_max : float
@@ -81,6 +79,8 @@ class Wham:
             Path to WHAM 1D executable.
         directory : str
             Path to write input and output files for WHAM analysis.
+        periodicity : str (optional , default : '')
+            Periodicity of the reaction coordinate.
         cleanup : bool (optional , default : False)
             Cleanup input files after running WHAM.
         verbose : bool (optional , default : True)
@@ -105,7 +105,10 @@ class Wham:
         self.args = [executable, periodicity, hist_min, hist_max, num_bins,
                      tolerance, temperature, numpad, data_file, out_file]
 
-        wham_process = subprocess.run(list(map(str, self.args)),
+        # arg_list = [str(arg) for arg in self.args]
+        arg_list = list(map(str, self.args))
+        while '' in arg_list: arg_list.remove('')
+        wham_process = subprocess.run(arg_list,
                                       stdout=subprocess.PIPE,
                                       stderr=subprocess.PIPE)
         if verbose:
