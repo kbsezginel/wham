@@ -10,7 +10,7 @@ setup(
     version="0.1.1",
     description="Python wrapper for Weighted Histogram Analysis Method as implemented by Grossfield et al.",
     author="Kutay B. Sezginel, Brian Novak",
-    url='https://github.com/bnovak1/wham',
+    url='https://github.com/kbsezginel/wham',
     include_package_data=True,
     packages=find_packages(),
     install_requires=['numpy'],
