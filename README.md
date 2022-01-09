@@ -7,7 +7,7 @@ Tested on Version 2.0.9, 2.0.11.
 1. Download WHAM from [here](http://membrane.urmc.rochester.edu/?page_id=126)
 2. Install Python wrapper:
 ```
-pip install git+https://github.com/bnovak1/wham
+pip install git+https://github.com/kbsezginel/wham
 ```
 
 ## Usage
@@ -25,15 +25,14 @@ from wham import Wham
 
 W = Wham()
 """
-Add your simulations with and id, simulation time, position,
+Add your simulations with an id, simulation time, position,
 equilibrium position for the spring, and spring constant in kcal/mol
 """
 W.add_simulation(sim_id, time, position, eq_position, k_spring)
 
 # You can plot position histograms before running WHAM
 W.plot_histograms(title='WHAM histograms', save='wham-hist.png'))
-
-"""
+```
 You can run WHAM 1D as follows.
 The input parameters are mostly in the same order as the WHAM executable:
 lower and upper boundary of the histogram,
@@ -43,7 +42,7 @@ number of “padding” values that should be printed for periodic PMFs, path to
 path to write input and output files for WHAM analysis,
 periodicity of the reaction coordinate (defaults to no periodicity),
 cleanup WHAM files after running, and finally WHAM verbosity.
-"""
+```python
 W.run(hist_min, hist_max, num_bins, tolerance, temperature,
       numpad, executable, directory, periodicity='', cleanup=False, verbose=True)
 
